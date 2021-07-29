@@ -21,6 +21,8 @@ import com.example.demo.dto.CountDTO;
 import com.example.demo.dto.MessageDTO;
 import com.example.demo.service.CarService;
 
+import io.swagger.annotations.ApiOperation;
+
 @RestController
 @RequestMapping("/api")
 
@@ -37,6 +39,8 @@ public class CarController {
 	
 	
 	@GetMapping("/cars/doors/{doors}")
+	// @ApiIgnore
+	@ApiOperation("Buscar coches filtrando por numero puertas")
 	public List<Car> findByDoors(@PathVariable Integer doors){
 		log.info("REST request to find cars by num doors");
 		return this.carService.findByDoors(doors);
