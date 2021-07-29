@@ -33,7 +33,7 @@ public class CarServiceImpl implements CarService {
 
 	@Override
 	public Optional<Car> findById(Long id) {
-		log.info("Executing findOne");
+		log.info("Executing findById");
 		return this.carRepository.findById(id);
 	}
 
