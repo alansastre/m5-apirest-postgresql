@@ -118,8 +118,18 @@ public class CarServiceImpl implements CarService {
 			log.warn("Trying to delete an empty or null car list");
 			return;
 		}
-		
 		this.carRepository.deleteAll(cars);
+	}
+
+	@Override
+	public void deleteAllById(List<Long> ids) {
+		log.info("Deleting car by id");
+		if (CollectionUtils.isEmpty(ids)) {
+			log.warn("Trying to delete an empty or null car list");
+			return;
+		}
+		this.carRepository.deleteAllById(ids);
+		
 	}
 	
 
