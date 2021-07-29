@@ -1,9 +1,13 @@
 package com.example.demo.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import com.example.demo.domain.Car;
 import com.example.demo.repository.CarRepository;
@@ -11,6 +15,10 @@ import com.example.demo.repository.CarRepository;
 @Service
 public class CarServiceImpl implements CarService {
 
+	private static final Integer MIN_DOORS = 3;
+
+	private final Logger log = LoggerFactory.getLogger(CarServiceImpl.class);
+	
 	private CarRepository carRepository;
 	
 	public CarServiceImpl(CarRepository carRepository) {
@@ -19,17 +27,100 @@ public class CarServiceImpl implements CarService {
 	
 	@Override
 	public List<Car> findAll() {
-		// ...
-		
-		// logica de negocio
-		// ..
+		log.info("Executing findAll Cars");
 		return this.carRepository.findAll();
 	}
 
 	@Override
-	public Optional<Car> findOne(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+	public Optional<Car> findById(Long id) {
+		log.info("Executing findOne");
+		return this.carRepository.findById(id);
 	}
+
+	@Override
+	public List<Car> findByDoors(Integer doors) {
+		log.info("Searching cars by doors");
+		if (doors < MIN_DOORS) {
+			log.warn("Trying to sarch less than allowed doors");
+			return new ArrayList<>();
+		}
+		
+		return this.carRepository.findByDoors(doors);
+	}
+
+	@Override
+	public Long count() {
+		log.info("Get total number of cars");
+		return this.carRepository.count();
+	}
+
+	@Override
+	public Car save(Car car) {
+		log.info("Creating / Updating car");
+		// pre
+		if(!this.validateCar(car)) 
+			return null;
+		
+		// actions
+		// find template from db
+		Car carDB = this.carRepository.save(car);
+		
+		// post:
+		// enviar notificacion
+		// this.notificationService(NotificationType.CREATION, car);
+		
+		return carDB;
+	}
+	
+	private boolean validateCar(Car car) {
+		// car null validation
+		if (car == null) {
+			log.warn("Trying to create null car");
+			return false;
+		}
+		// num doors validation
+		if (car.getDoors() == null || car.getDoors() < MIN_DOORS) {
+			log.warn("Trying to create car with not allowed number of doors");
+			return false;
+		}
+		// color validation
+		// .... 
+		
+		return true;
+	}
+
+	@Override
+	public void deleteById(Long id) {
+		log.info("Deleting car by id");
+		if (id == null || id < 0 || id == 0) {
+			log.warn("Trying to delete car with wrong id");
+			return;
+		}
+
+		try {
+			this.carRepository.deleteById(id);
+		} catch (Exception e) {
+			log.error("Error trying to delete car by id {}", id, e);
+		}
+
+	}
+
+	@Override
+	public void deleteAll() {
+		log.info("Deleting cars");
+		this.carRepository.deleteAll();
+	}
+
+	@Override
+	public void deleteAll(List<Car> cars) {
+		log.info("Deleting car by id");
+		if (CollectionUtils.isEmpty(cars)) {
+			log.warn("Trying to delete an empty or null car list");
+			return;
+		}
+		
+		this.carRepository.deleteAll(cars);
+	}
+	
 
 }
