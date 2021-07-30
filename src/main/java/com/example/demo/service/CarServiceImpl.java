@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -8,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import com.example.demo.domain.Car;
 import com.example.demo.repository.CarRepository;
@@ -130,6 +132,54 @@ public class CarServiceImpl implements CarService {
 		}
 		this.carRepository.deleteAllById(ids);
 		
+	}
+
+	@Override
+	public List<Car> findByManufacturerAndModel(String manufacturer, String model) {
+		
+		if(!StringUtils.hasLength(manufacturer) || !StringUtils.hasLength(model))
+			return new ArrayList<>();
+			
+		return this.carRepository.findByManufacturerAndModel(manufacturer, model);
+	}
+
+	@Override
+	public List<Car> findByDoorsGreaterThanEqual(Integer doors){
+		if(doors == null || doors < 0)
+			return new ArrayList<>();
+		
+		return this.carRepository.findByDoorsGreaterThanEqual(doors);
+	}
+
+	@Override
+	public List<Car> findByModelContaining(String model) {
+		return this.carRepository.findByModelContaining(model);
+	}
+
+	@Override
+	public List<Car> findByYearIn(List<Integer> years) {
+		return this.carRepository.findByYearIn(years);
+	}
+
+	@Override
+	public List<Car> findByYearBetween(Integer startYear, Integer endYear) {
+		return this.carRepository.findByYearBetween(startYear, endYear);
+	}
+
+	@Override
+	public List<Car> findByReleaseDateBetween(LocalDate startDate, LocalDate endDate) {
+		return this.carRepository.findByReleaseDateBetween(startDate, endDate);
+	}
+
+	@Override
+	public List<Car> findByAvailableTrue() {
+		return this.carRepository.findByAvailableTrue();
+
+	}
+
+	@Override
+	public Long deleteAllByAvailableFalse() {
+		return this.carRepository.deleteAllByAvailableFalse();
 	}
 	
 

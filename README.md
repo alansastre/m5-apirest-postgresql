@@ -1,5 +1,6 @@
+## Spring Data JPA - Query creation
 
-https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#repositories.query-methods.query-creation
+https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods.query-creation
 
 
 1. PostgreSQL / MySQL / H2 / MariaDB / SQL Server ...
@@ -19,3 +20,4 @@ POSTMAN --> Controlador --> Servicio --> Repositorio --> Base de datos (PostgreS
 
 Angular (Navegador) --> Controlador (+ Seguridad JWT) --> Servicio --> Repositorio --> Base de datos
 (Frontend: Vercel) --> (Backend: Heroku)
+
