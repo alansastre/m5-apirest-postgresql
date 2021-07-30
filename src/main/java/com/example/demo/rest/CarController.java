@@ -34,18 +34,12 @@ public class CarController {
 	// dependencia
 	private CarService carService; 
 	
-	public CarController(CarService carRepository) { // spring inyecta la dependencia
-		this.carService = carRepository;
+	public CarController(CarService carService) { // spring inyecta la dependencia
+		this.carService = carService;
 	}
 	
-	
-	@GetMapping("/cars/doors/{doors}")
-	// @ApiIgnore
-	@ApiOperation("Buscar coches filtrando por numero puertas")
-	public List<Car> findByDoors(@PathVariable Integer doors){
-		log.info("REST request to find cars by num doors");
-		return this.carService.findByDoors(doors);
-	}
+
+	/* ============= SPRING CRUD METHODS ================ */
 	
 	/**
 	 * http://localhost:8080/api/cars/1
@@ -169,8 +163,27 @@ public class CarController {
 	
 	
 	
+	/* ============= CUSTOM CRUD METHODS ================ */
+
 	
+	@GetMapping("/cars/manufacturer/{manufacturer}/model/{model}")
+	public List<Car> findByManufacturerAndModel(@PathVariable String manufacturer,
+			@PathVariable String model){
+		return this.carService.findByManufacturerAndModel(manufacturer, model);
+	}
 	
+	@GetMapping("/cars/doors/{doors}")
+	// @ApiIgnore
+	@ApiOperation("Buscar coches filtrando por numero puertas")
+	public List<Car> findByDoors(@PathVariable Integer doors){
+		log.info("REST request to find cars by num doors");
+		return this.carService.findByDoors(doors);
+	}
+	
+	@GetMapping("/cars/doors-gte/{doors}")
+	public List<Car> findByDoorsGreaterThanEqual(@PathVariable Integer doors){
+		return this.carService.findByDoorsGreaterThanEqual(doors);
+	}
 	
 	
 	
